@@ -1,9 +1,13 @@
 # pipelines.ludens
 
-> *Plataforma de Venda de Ingressos para Teatro Comunitário*
-
 <p align="center">
-  <img src=".github/assets/banner.svg" alt="ludens" width="720">
+  <img src=".github/assets/logo.png" alt="ludens" width="180">
+
+  <h3 align="center">ludens</h3>
+
+  <p align="center">
+    Plataforma de Venda de Ingressos para Teatro Comunitário
+  </p>
 </p>
 
 Workflows reutilizáveis (`workflow_call`) de CI/CD pros repositórios da plataforma Ludens
