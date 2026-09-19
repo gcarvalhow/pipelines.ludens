@@ -1,5 +1,11 @@
 # pipelines.ludens
 
+> *Plataforma de Venda de Ingressos para Teatro Comunitário*
+
+<p align="center">
+  <img src=".github/assets/banner.svg" alt="ludens" width="720">
+</p>
+
 Workflows reutilizáveis (`workflow_call`) de CI/CD pros repositórios da plataforma Ludens
 (`api.ludens`, e futuramente `web.ludens`). Cada repo consumidor chama estes workflows em vez
 de reimplementar test/build/deploy do zero.
