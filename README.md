@@ -51,6 +51,51 @@ jobs:
 |---|---|---|---|
 | `image-name` | sim | — | Tag da imagem gerada pelo `docker build` |
 
+### `_publish.yaml`
+
+Builda a imagem Docker do projeto e publica no GHCR, com as tags `:latest` e `:<sha>`.
+Autentica com `secrets.GITHUB_TOKEN` (automático, sem PAT nova) via `docker/login-action`.
+
+```yaml
+jobs:
+  publish:
+    uses: gcarvalhow/pipelines.ludens/.github/workflows/_publish.yaml@master
+    with:
+      image-name: ghcr.io/gcarvalhow/api.ludens
+```
+
+| Input | Obrigatório | Default | Descrição |
+|---|---|---|---|
+| `image-name` | sim | — | Referência completa da imagem a publicar (ex.: `ghcr.io/owner/repo`), sem tag |
+| `working-directory` | não | `.` | Diretório com o `Dockerfile` |
+
+### `_terraform.yaml`
+
+Roda `terraform fmt -check` / `init` / `validate` / `plan` sempre; só roda `apply` se o input
+`apply` vier `true` — decisão do workflow chamador, nunca do reutilizável. Autentica no Azure via
+as quatro `secrets` de Service Principal (`ARM_*`), passadas pelo chamador (`secrets: inherit` ou
+uma a uma).
+
+```yaml
+jobs:
+  terraform:
+    uses: gcarvalhow/pipelines.ludens/.github/workflows/_terraform.yaml@master
+    with:
+      working-directory: terraform
+      apply: false
+    secrets: inherit
+```
+
+| Input | Obrigatório | Default | Descrição |
+|---|---|---|---|
+| `working-directory` | não | `.` | Diretório com o módulo raiz do Terraform |
+| `apply` | não | `false` | Roda `terraform apply -auto-approve` depois de um `plan` limpo |
+| `tf-vars` | não | — | `TF_VAR_*` extras a exportar antes do `plan`/`apply`, um `CHAVE=valor` por linha |
+
+| Secret | Obrigatório | Descrição |
+|---|---|---|
+| `ARM_CLIENT_ID` / `ARM_CLIENT_SECRET` / `ARM_SUBSCRIPTION_ID` / `ARM_TENANT_ID` | sim | Credenciais do Service Principal do Azure (`az ad sp create-for-rbac`) |
+
 ## Convenção
 
 - Prefixo `_` no nome do arquivo = workflow reutilizável (`on: workflow_call`), nunca disparado
